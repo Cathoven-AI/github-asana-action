@@ -1,0 +1,9 @@
+name: "Close Asana Task"
+description: "Closes an Asana task when a PR is merged"
+inputs:
+  asana-pat:
+    description: "Asana Personal Access Token"
+    required: true
+runs:
+  using: "node20"
+  main: "dist/index.js"
