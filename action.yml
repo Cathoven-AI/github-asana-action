@@ -1,5 +1,8 @@
 name: "Close Asana Task"
 description: "Closes an Asana task when a PR is merged"
+branding:
+  color: "purple"
+  icon: "activity"
 inputs:
   asana-pat:
     description: "Asana Personal Access Token"
