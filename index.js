@@ -33,7 +33,6 @@ async function run() {
     core.info('PR was merged to main or master. Proceeding to close Asana tasks...');
 
     const body = pullRequest.body;
-    core.info(`Pull request body: ${body}`);
     if (!body) {
       core.info('Pull request has no description. Skipping.');
       return;
