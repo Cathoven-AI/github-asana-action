@@ -40519,10 +40519,9 @@ async function run() {
   try {
     const pat = core.getInput('asana-pat');
 
-    core.info(`Github context: ${JSON.stringify(github.context)}`);
+    core.info(`Event: ${github.context.eventName}, Action: ${github.context.payload.action}`);
     
     // Get the pull request from the context
-    // This works for 'pull_request' events (opened, synchronized, closed, etc.)
     const pullRequest = github.context.payload.pull_request;
 
     if (!pullRequest) {
@@ -40530,14 +40529,21 @@ async function run() {
       return;
     }
 
-    // Check if the PR was merged if the event is 'closed'
-    // The user wants to close the task "when the PR merged".
-    // Usually the workflow file handles the condition (types: [closed] + if: merged), 
-    // but we can log context info here.
-    if (github.context.eventName === 'pull_request' && github.context.payload.action === 'closed' && !pullRequest.merged) {
+    core.info(`PR #${pullRequest.number}: "${pullRequest.title}"`);
+    core.info(`Target branch: ${pullRequest.base.ref}, Merged: ${pullRequest.merged}`);
+
+    // Only close Asana tasks when PR is merged to main
+    if (pullRequest.base.ref !== 'main') {
+      core.info(`PR target branch is "${pullRequest.base.ref}", not "main". Skipping.`);
+      return;
+    }
+
+    if (!pullRequest.merged) {
       core.info('Pull request was closed but not merged. Skipping Asana task completion.');
       return;
     }
+
+    core.info('PR was merged to main. Proceeding to close Asana tasks...');
 
     const body = pullRequest.body;
     core.info(`Pull request body: ${body}`);
