@@ -40518,6 +40518,8 @@ const axios = __nccwpck_require__(7455);
 async function run() {
   try {
     const pat = core.getInput('asana-pat');
+
+    core.info(`Github context: ${JSON.stringify(github.context)}`);
     
     // Get the pull request from the context
     // This works for 'pull_request' events (opened, synchronized, closed, etc.)
@@ -40538,6 +40540,7 @@ async function run() {
     }
 
     const body = pullRequest.body;
+    core.info(`Pull request body: ${body}`);
     if (!body) {
       core.info('Pull request has no description. Skipping.');
       return;
