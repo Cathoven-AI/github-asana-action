@@ -20,8 +20,8 @@ async function run() {
     core.info(`Target branch: ${pullRequest.base.ref}, Merged: ${pullRequest.merged}`);
 
     // Only close Asana tasks when PR is merged to main
-    if (pullRequest.base.ref !== 'main') {
-      core.info(`PR target branch is "${pullRequest.base.ref}", not "main". Skipping.`);
+    if (pullRequest.base.ref !== 'main' && pullRequest.base.ref !== 'master') {
+      core.info(`PR target branch is "${pullRequest.base.ref}", not "main" or "master". Skipping.`);
       return;
     }
 
@@ -30,7 +30,7 @@ async function run() {
       return;
     }
 
-    core.info('PR was merged to main. Proceeding to close Asana tasks...');
+    core.info('PR was merged to main or master. Proceeding to close Asana tasks...');
 
     const body = pullRequest.body;
     core.info(`Pull request body: ${body}`);
